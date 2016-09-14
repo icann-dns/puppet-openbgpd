@@ -1,0 +1,88 @@
+#
+# This file is managed by Puppet. DO NOT EDIT.
+#
+ <%- 
+@no_export = false 
+@nets = []
+if @enable_advertisements then
+  if ! @failover_server then
+    if @enable_advertisements_v4 then
+      @nets += @networks4
+    end
+    if @enable_advertisements_v6 then
+      @nets += @networks6
+    end
+  end
+  if @enable_advertisements_v4 then
+    @nets += @failsafe_networks4
+  end
+  if @enable_advertisements_v6 then
+    @nets += @failsafe_networks6
+  end
+end
+@fail_nets = @failsafe_networks4 + @failsafe_networks6
+ -%>
+AS <%= @my_asn %>
+router-id <%= @router_id %>
+<%- @nets.each do |net| -%>
+network <%= net %>
+<%- end -%>
+<% @peers.each_pair do |as, config| -%>
+group "AS<%= as %>" {
+  remote-as <%= as %>
+  <%- if config.has_key?('multihop') then -%>
+  multihop <%= config['multihop'] %>
+  <%- end -%>
+  <%- if config.has_key?('prepend') then -%>
+  set prepend-self <%= config['prepend'] %>
+  <%- end -%>
+  <%- if config.has_key?('addr6') then -%>
+    <%- config['addr6'].each do |addr| -%>
+      <%- if addr then -%>
+  neighbor "<%= addr %>" {
+    descr "<%= config['desc'] %>"
+  }
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+  <%- if config.has_key?('addr4') then -%>
+    <%- config['addr4'].each do |addr| -%>
+      <%- if addr then -%>
+  neighbor "<%= addr %>" {
+    descr "<%= config['desc'] %>"
+  }
+      <%- end -%>
+    <%- end -%>
+  <%- end -%>
+}
+  <%- if config['inbound_routes'].to_s == 'all' then -%>
+deny from group "AS<%= as %>" inet prefix 0.0.0.0/0 prefixlen = 0
+deny from group "AS<%= as %>" inet prefixlen > 24
+deny from group "AS<%= as %>" inet6 prefix ::/0 prefixlen = 0
+deny from group "AS<%= as %>" inet6 prefixlen > 48
+  <%- elsif config['inbound_routes'].to_s == 'default' or config['inbound_routes'].to_s == 'defaultv6' -%>
+# Config hardcoded here to deny any default route learning over IPv4
+deny from group "AS<%= as %>" inet
+allow from group "AS<%= as %>" inet6 prefix ::/0 prefixlen = 0
+  <%- else -%>
+deny from group "AS<%= as %>"
+  <%- end -%>
+  <%- if config.has_key?('communities') then 
+      #This should ensure no-export is always first if present
+      config['communities'] = config['communities'].sort{ |x,y| y<=>x} 
+    @nets.each do |net| -%>
+match to group "AS<%= as %>" prefix <%= net %> set {
+      <%- config['communities'].each do |community|
+        if community.strip == 'no-export' then
+          if @fail_nets.include?(net) -%>
+  community NO_EXPORT<%- if community != config['communities'].last -%>, <%- end -%>
+          <%- end
+        else -%>
+  community <%= community %><%- if community != config['communities'].last -%>, <%- end -%>
+        <%- end 
+      end -%>
+
+}
+    <%- end 
+  end -%>
+<%- end -%>
