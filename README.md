@@ -33,6 +33,7 @@ This modules allows for the manging of the openbgpd daemon.
 ### Setup Requirements
 
 * depends on stdlib 4.12.0 (may work with earlier versions)
+* depends on icann-tea 0.2.2 (may work with earlier versions)
 
 ### Beginning with openbgpd
 
