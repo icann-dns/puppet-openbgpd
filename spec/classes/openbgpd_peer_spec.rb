@@ -83,6 +83,10 @@ describe 'openbgpd' do
           ).with_content(
             %r{network 2001:DB8::\/48}
           ).with_content(
+            %r{network 198.51.100.0\/24}
+          ).with_content(
+            %r{network 2001:DB8::1\/48}
+          ).with_content(
             %r{network 192.0.2.0\/24}
           ).with_content(
             %r{network 2001:DB8::\/32}
@@ -98,6 +102,10 @@ describe 'openbgpd' do
             %r{deny from group "AS64497" inet6 prefixlen > 48}
           ).with_content(
             %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+          ).with_content(
+            %r{match to group "AS64497" prefix 198.51.100.0\/24 set \{\s+community 64497:100\s+\}}
+          ).with_content(
+            %r{match to group "AS64497" prefix 2001:DB8::1\/48 set \{\s+community 64497:100\s+\}}
           ).with_content(
             %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
           ).with_content(
@@ -149,6 +157,32 @@ describe 'openbgpd' do
               %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).with_content(
               %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+            )
+          end
+        end
+        context 'rejected_v4' do
+          before { params.merge!(rejected_v4: ['192.0.2.0/24']) }
+          it { is_expected.to compile }
+          it do
+            is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
+              %r{
+              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s0.0.0.0\/0\sprefixlen\s=\s0\n
+              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s192.0.2.0\/24\sprefixlen\s>=\s24\n
+              deny\sfrom\sgroup\s"AS64497"\sinet\sprefixlen\s>\s24\n
+              }x
+            )
+          end
+        end
+        context 'rejected_v6' do
+          before { params.merge!(rejected_v6: ['2001:DB8::1/48']) }
+          it { is_expected.to compile }
+          it do
+            is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
+              %r{
+              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s::\/0\sprefixlen\s=\s0\n
+              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s2001:DB8::1\/48\sprefixlen\s>=\s48\n
+              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefixlen\s>\s48\n
+              }x
             )
           end
         end
