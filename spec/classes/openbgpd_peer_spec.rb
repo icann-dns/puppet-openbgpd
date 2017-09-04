@@ -41,7 +41,7 @@ describe 'openbgpd' do
         64_497 => {
           'addr4'          => ['192.0.2.2'],
           'addr6'          => ['2001:DB8::2'],
-          'desc'           => "TEST Network",
+          'desc'           => 'TEST Network',
           'inbound_routes' => 'all',
           'communities'    => ['no-export', '64497:100'],
           'multihop'       => 5,
@@ -49,7 +49,7 @@ describe 'openbgpd' do
         },
         64_498 => {
           'addr4'          => ['192.0.2.2'],
-          'desc'           => "TEST 2 Network"
+          'desc'           => 'TEST 2 Network'
         }
       }
     }
@@ -75,9 +75,9 @@ describe 'openbgpd' do
             require: 'Package[openbgpd]',
             notify: 'Service[openbgpd]'
           ).with_content(
-            %r{AS 64496}
+            /AS 64496/
           ).with_content(
-            %r{router-id 192.0.2.2}
+            /router-id 192.0.2.2/
           ).with_content(
             %r{network 192.0.2.0\/25}
           ).with_content(
@@ -91,15 +91,15 @@ describe 'openbgpd' do
           ).with_content(
             %r{network 2001:DB8::\/32}
           ).with_content(
-            %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+            /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
           ).with_content(
             %r{deny from group "AS64497" inet prefix 0.0.0.0\/0 prefixlen = 0}
           ).with_content(
-            %r{deny from group "AS64497" inet prefixlen > 24}
+            /deny from group "AS64497" inet prefixlen > 24/
           ).with_content(
             %r{deny from group "AS64497" inet6 prefix ::\/0 prefixlen = 0}
           ).with_content(
-            %r{deny from group "AS64497" inet6 prefixlen > 48}
+            /deny from group "AS64497" inet6 prefixlen > 48/
           ).with_content(
             %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
           ).with_content(
@@ -113,9 +113,9 @@ describe 'openbgpd' do
           ).with_content(
             %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
           ).with_content(
-            %r{group "AS64498" \{\s+remote-as 64498\s+neighbor "192.0.2.2" \{\s+descr "TEST 2 Network"\s+\}\s+\}}
+            /group "AS64498" \{\s+remote-as 64498\s+neighbor "192.0.2.2" \{\s+descr "TEST 2 Network"\s+\}\s+\}/
           ).with_content(
-            %r{deny from group "AS64498"}
+            /deny from group "AS64498"/
           )
         end
       end
@@ -125,15 +125,15 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             ).with_content(
               %r{deny from group "AS64497" inet prefix 0.0.0.0\/0 prefixlen = 0}
             ).with_content(
-              %r{deny from group "AS64497" inet prefixlen > 24}
+              /deny from group "AS64497" inet prefixlen > 24/
             ).with_content(
               %r{deny from group "AS64497" inet6 prefix ::\/0 prefixlen = 0}
             ).with_content(
-              %r{deny from group "AS64497" inet6 prefixlen > 48}
+              /deny from group "AS64497" inet6 prefixlen > 48/
             ).without_content(
               %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
             ).with_content(
@@ -283,7 +283,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.3'],
                   'addr6'          => ['2001:DB8::2'],
-                  'desc'           => "TEST Network",
+                  'desc'           => 'TEST Network',
                   'inbound_routes' => 'all',
                   'communities'    => ['no-export', '64497:100'],
                   'multihop'       => 5,
@@ -295,7 +295,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.3" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.3" \{\s+descr "TEST Network"\s+\}\s+\}/
             )
           end
         end
@@ -306,7 +306,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.2'],
                   'addr6'          => ['2001:DB8::3'],
-                  'desc'           => "TEST Network",
+                  'desc'           => 'TEST Network',
                   'inbound_routes' => 'all',
                   'communities'    => ['no-export', '64497:100'],
                   'multihop'       => 5,
@@ -318,7 +318,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::3" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::3" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             )
           end
         end
@@ -329,7 +329,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.2'],
                   'addr6'          => ['2001:DB8::2'],
-                  'desc'           => "FOO Network",
+                  'desc'           => 'FOO Network',
                   'inbound_routes' => 'all',
                   'communities'    => ['no-export', '64497:100'],
                   'multihop'       => 5,
@@ -341,7 +341,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "FOO Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "FOO Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "FOO Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "FOO Network"\s+\}\s+\}/
             )
           end
         end
@@ -352,7 +352,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.2'],
                   'addr6'          => ['2001:DB8::2'],
-                  'desc'           => "TEST Network",
+                  'desc'           => 'TEST Network',
                   'inbound_routes' => 'all',
                   'communities'    => ['no-export', '64497:100'],
                   'multihop'       => 1,
@@ -364,7 +364,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 1\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 1\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             )
           end
         end
@@ -375,7 +375,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.2'],
                   'addr6'          => ['2001:DB8::2'],
-                  'desc'           => "TEST Network",
+                  'desc'           => 'TEST Network',
                   'inbound_routes' => 'all',
                   'communities'    => ['no-export', '64497:100'],
                   'multihop'       => 5,
@@ -387,7 +387,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 2\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 2\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             )
           end
         end
@@ -398,7 +398,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.2'],
                   'addr6'          => ['2001:DB8::2'],
-                  'desc'           => "TEST Network",
+                  'desc'           => 'TEST Network',
                   'inbound_routes' => 'default',
                   'communities'    => ['no-export', '64497:100'],
                   'multihop'       => 5,
@@ -410,9 +410,9 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             ).with_content(
-              %r{deny from group "AS64497" inet}
+              /deny from group "AS64497" inet/
             ).with_content(
               %r{allow from group "AS64497" inet6 prefix ::\/0 prefixlen = 0}
             )
@@ -425,7 +425,7 @@ describe 'openbgpd' do
                 64_497 => {
                   'addr4'          => ['192.0.2.2'],
                   'addr6'          => ['2001:DB8::2'],
-                  'desc'           => "TEST Network",
+                  'desc'           => 'TEST Network',
                   'inbound_routes' => 'all',
                   'communities'    => ['no-export', '64497:200'],
                   'multihop'       => 5,
@@ -437,7 +437,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}}
+              /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             ).with_content(
               %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:200\s+\}}
             ).with_content(

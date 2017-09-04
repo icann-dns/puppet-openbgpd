@@ -61,9 +61,9 @@ describe 'openbgpd' do
             require: 'Package[openbgpd]',
             notify: 'Service[openbgpd]'
           ).with_content(
-            %r{AS 64496}
+            /AS 64496/
           ).with_content(
-            %r{router-id 192.0.2.2}
+            /router-id 192.0.2.2/
           ).with_content(
             %r{network 192.0.2.0\/25}
           ).with_content(
@@ -87,7 +87,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{AS 64497}
+              /AS 64497/
             )
           end
         end
@@ -96,7 +96,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{router-id 192.0.2.3}
+              /router-id 192.0.2.3/
             )
           end
         end
