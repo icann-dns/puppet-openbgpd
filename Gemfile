@@ -66,6 +66,7 @@ group :system_tests do
   gem 'beaker-testmode_switcher',      :require => false
   gem 'beaker-pe',                     :require => false
   gem 'beaker-answers',                :require => false
+  gem 'vagrant-wrapper',               :require => false
 end
 
 
