@@ -27,14 +27,15 @@ hosts.each do |host|
   host.install_package('git')
   if host['platform'] =~ %r{freebsd}
     # default installs incorect version
-    host.install_package('sysutils/puppet4')
+    #host.install_package('sysutils/puppet4')
+    host.install_package('devel/rubygem-gems')
     host.install_package('dns/bind-tools')
   else
     host.install_package('vim')
     host.install_package('dnsutils')
   end
   # remove search list and domain from resolve.conf
-  on(host, 'echo $(grep nameserver /etc/resolv.conf) > /etc/resolv.conf')
+  on(host, 'echo nameserver 8.8.8.8 > /etc/resolv.conf')
 end
 if ENV['BEAKER_TESTMODE'] == 'agent'
   step 'install puppet enterprise'

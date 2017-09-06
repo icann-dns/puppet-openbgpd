@@ -3,18 +3,6 @@
 require 'spec_helper_acceptance'
 
 describe 'openbgpd class' do
-  context 'defaults' do
-    pp = 'class {\'::openbgpd\': }'
-    it 'work with no errors' do
-      apply_manifest(pp, catch_failures: true)
-    end
-    it 'clean run' do
-      expect(apply_manifest(pp, catch_failures: true).exit_code).to eq 0
-    end
-    describe service('openbgpd') do
-      it { is_expected.to be_running }
-    end
-  end
   context 'basic IPv4 peer' do
     pp = <<-EOF
     class { '::openbgpd':
@@ -22,7 +10,7 @@ describe 'openbgpd class' do
       router_id => '192.0.2.1',
       networks4 => [ '192.0.2.0/24'],
       peers => {
-        '64497' => {
+        64497 => {
           'addr4' => ['192.0.2.2'],
           'desc'  => 'TEST Network'
           }
@@ -37,23 +25,24 @@ describe 'openbgpd class' do
     end
     describe service('openbgpd') do
       it { is_expected.to be_running }
+      it { should be_enabled }
     end
     describe process('bgpd') do
-      its(:user) { is_expected.to eq 'openbgpd' }
+      its(:user) { is_expected.to eq '_bgpd' }
       it { is_expected.to be_running }
     end
     describe port(179) do
       it { is_expected.to be_listening }
     end
-    describe command('bgpctl show sum') do
+    describe command('bgpctl show neighbor') do
       its(:stdout) do
         is_expected.to match(
-          %r{TEST NETWORK\s64496.*4}
+          /BGP neighbor is 192.0.2.2, remote AS 64497/
         )
       end
       its(:stdout) do
         is_expected.not_to match(
-          %r{TEST NETWORK\s64496.*6}
+          /BGP neighbor is 2001:db8::2, remote AS 64497/
         )
       end
     end
@@ -65,7 +54,7 @@ describe 'openbgpd class' do
       router_id => '192.0.2.1',
       networks6 => [ '2001:DB8::/48'],
       peers => {
-        '64497' => {
+        64497 => {
           'addr6' => ['2001:DB8::2'],
           'desc'  => 'TEST Network'
           }
@@ -78,25 +67,22 @@ describe 'openbgpd class' do
     it 'clean work with no errors' do
       expect(apply_manifest(pp, catch_failures: true).exit_code).to eq 0
     end
-    describe service('openbgpd') do
-      it { is_expected.to be_running }
-    end
     describe process('bgpd') do
-      its(:user) { is_expected.to eq 'openbgpd' }
+      its(:user) { is_expected.to eq '_bgpd' }
       it { is_expected.to be_running }
     end
     describe port(179) do
       it { is_expected.to be_listening }
     end
-    describe command('bgpctl show sum') do
+    describe command('bgpctl show neighbor') do
       its(:stdout) do
         is_expected.not_to match(
-          %r{TEST NETWORK\s64496.*4}
+          /BGP neighbor is 192.0.2.2, remote AS 64497/
         )
       end
       its(:stdout) do
         is_expected.to match(
-          %r{TEST NETWORK\s64496.*6}
+          /BGP neighbor is 2001:db8::2, remote AS 64497/
         )
       end
     end
@@ -109,7 +95,7 @@ describe 'openbgpd class' do
       networks4 => [ '192.0.2.0/24'],
       networks6 => [ '2001:DB8::/48'],
       peers => {
-        '64497' => {
+        64497 => {
           'addr4' => ['192.0.2.2'],
           'addr6' => ['2001:DB8::2'],
           'desc'  => 'TEST Network'
@@ -123,9 +109,6 @@ describe 'openbgpd class' do
     it 'clean work with no errors' do
       expect(apply_manifest(pp, catch_failures: true).exit_code).to eq 0
     end
-    describe service('openbgpd') do
-      it { is_expected.to be_running }
-    end
     describe process('bgpd') do
       its(:user) { is_expected.to eq '_bgpd' }
       it { is_expected.to be_running }
@@ -133,15 +116,15 @@ describe 'openbgpd class' do
     describe port(179) do
       it { is_expected.to be_listening }
     end
-    describe command('bgpctl show sum') do
+    describe command('bgpctl show neighbor') do
       its(:stdout) do
         is_expected.to match(
-          %r{TEST NETWORK\s64496.*4}
+          /BGP neighbor is 192.0.2.2, remote AS 64497/
         )
       end
       its(:stdout) do
         is_expected.to match(
-          %r{TEST NETWORK\s64496.*6}
+          /BGP neighbor is 2001:db8::2, remote AS 64497/
         )
       end
     end
