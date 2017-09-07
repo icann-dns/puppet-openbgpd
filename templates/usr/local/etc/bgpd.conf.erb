@@ -24,6 +24,9 @@ end
  -%>
 AS <%= @my_asn %>
 router-id <%= @router_id %>
+<%- unless @fib_update -%>
+fib-update no
+<%- end -%>
 <%- @nets.each do |net| -%>
 network <%= net %>
 <%- end -%>
@@ -41,6 +44,9 @@ group "AS<%= as %>" {
       <%- if addr then -%>
   neighbor "<%= addr %>" {
     descr "<%= config['desc'] %>"
+      <%-if config['default_originate'] -%>
+    announce default-route
+      <%- end -%>
   }
       <%- end -%>
     <%- end -%>
@@ -50,6 +56,9 @@ group "AS<%= as %>" {
       <%- if addr then -%>
   neighbor "<%= addr %>" {
     descr "<%= config['desc'] %>"
+      <%-if config['default_originate'] -%>
+    announce default-route
+      <%- end -%>
   }
       <%- end -%>
     <%- end -%>
@@ -66,10 +75,16 @@ deny from group "AS<%= as %>" inet6 prefix ::/0 prefixlen = 0
 deny from group "AS<%= as %>" inet6 prefix <%= reject %> prefixlen >= <%= reject.split('/')[1] %>
   <%- end -%>
 deny from group "AS<%= as %>" inet6 prefixlen > 48
-  <%- elsif config['inbound_routes'].to_s == 'default' or config['inbound_routes'].to_s == 'defaultv6' -%>
-# Config hardcoded here to deny any default route learning over IPv4
-deny from group "AS<%= as %>" inet
+  <%- elsif config['inbound_routes'].to_s == 'default' -%>
+deny from group "AS<%= as %>"
+allow from group "AS<%= as %>" inet prefix 0.0.0.0/0 prefixlen = 0
 allow from group "AS<%= as %>" inet6 prefix ::/0 prefixlen = 0
+  <%- elsif config['inbound_routes'].to_s == 'v6default' -%>
+deny from group "AS<%= as %>"
+allow from group "AS<%= as %>" inet6 prefix ::/0 prefixlen = 0
+  <%- elsif config['inbound_routes'].to_s == 'v4default' -%>
+deny from group "AS<%= as %>"
+allow from group "AS<%= as %>" inet prefix 0.0.0.0/0 prefixlen = 0
   <%- else -%>
 deny from group "AS<%= as %>"
   <%- end -%>

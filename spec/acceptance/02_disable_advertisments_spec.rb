@@ -89,10 +89,9 @@ describe 'openbgpd class multi peers' do
     end
     it 'r3 clean puppet run' do
       expect(apply_manifest_on(router3, pp3, catch_failures: true).exit_code).to eq 0
-      # allow peers to configure and establish
-      sleep(10)
     end
     describe service('openbgpd') do
+      let(:pre_command) { 'sleep 5'  }
       it { is_expected.to be_running }
     end
     describe process('bgpd') do

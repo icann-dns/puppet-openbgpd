@@ -17,6 +17,7 @@ class openbgpd (
   String                $package                  = 'openbgpd',
   String                $service                  = 'openbgpd',
   Boolean               $enable                   = true,
+  Boolean               $fib_update               = true,
   Hash[Openbgpd::Asn, Openbgpd::Peer] $peers      = {},
 ) {
 
@@ -28,8 +29,15 @@ class openbgpd (
     require => Package[$package],
     notify  => Service[$service],
   }
+  file {'/usr/local/bin/reload_bgp':
+    ensure  => present,
+    content => template('openbgpd/usr/local/bin/reload_bgp.erb'),
+    mode    => '0500',
+  }
   service { $service:
-    ensure => $enable,
-    enable => $enable,
+    ensure  => $enable,
+    enable  => $enable,
+    #restart => '/usr/local/bin/reload_bgp',
+    require => File['/usr/local/bin/reload_bgp'],
   }
 }
