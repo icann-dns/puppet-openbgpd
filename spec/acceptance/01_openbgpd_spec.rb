@@ -25,7 +25,7 @@ describe 'openbgpd class' do
     end
     describe service('openbgpd') do
       it { is_expected.to be_running }
-      it { should be_enabled }
+      it { is_expected.to be_enabled }
     end
     describe process('bgpd') do
       its(:user) { is_expected.to eq '_bgpd' }
@@ -89,7 +89,7 @@ describe 'openbgpd class' do
   end
   context 'basic IPv6 & IPv4 peers' do
     pp = <<-EOF
-    class { '::openbgpd': 
+    class { '::openbgpd':
       my_asn => 64496,
       router_id => '192.0.2.1',
       networks4 => [ '192.0.2.0/24'],

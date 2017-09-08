@@ -91,7 +91,6 @@ describe 'openbgpd class multi peers' do
       expect(apply_manifest_on(router3, pp3, catch_failures: true).exit_code).to eq 0
     end
     describe service('openbgpd') do
-      let(:pre_command) { 'sleep 5'  }
       it { is_expected.to be_running }
     end
     describe process('bgpd') do
@@ -114,6 +113,8 @@ describe 'openbgpd class multi peers' do
       its(:exit_status) { is_expected.to eq 0 }
     end
     describe command("bgpctl show neighbor #{router2_ip}") do
+      let(:pre_command) { 'sleep 120' }
+
       its(:stdout) do
         is_expected.to match(
           /BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established/m
@@ -141,10 +142,10 @@ describe 'openbgpd class multi peers' do
         )
       end
     end
-    describe command("bgpctl show rib empty-as") do
+    describe command('bgpctl show rib empty-as') do
       its(:stdout) do
         is_expected.not_to match(
-          /AI\*>?\s#{ipv4_network}\s+0.0.0.0\s+\d+\s+\d+\s+i/
+          /AI\*>?\s#{ipv4_network}\s+0\.0\.0\.0\s+\d+\s+\d+\s+i/
         )
       end
       its(:stdout) do
@@ -153,7 +154,7 @@ describe 'openbgpd class multi peers' do
         )
       end
     end
-    describe command(" bgpctl show rib peer-as #{router2_asn}") do
+    describe command("bgpctl show rib peer-as #{router2_asn}") do
       its(:stdout) do
         is_expected.not_to match(
           /\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i/

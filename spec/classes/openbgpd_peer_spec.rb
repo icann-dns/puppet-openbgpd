@@ -412,7 +412,7 @@ describe 'openbgpd' do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             ).with_content(
-              /deny from group "AS64497" inet/
+              /deny from group "AS64497"/
             ).with_content(
               %r{allow from group "AS64497" inet6 prefix ::\/0 prefixlen = 0}
             )
