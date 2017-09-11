@@ -11,10 +11,12 @@ before_script:
   - gem --version
   - rvm use 2.3
   - rm Gemfile.lock || true
-  - bundle install
+  - FACTER_GEM_VERSION="< 2.5" bundle install --path=${BUNDLE_PATH:-vendor/bundle}
 
 rspec:
   stage: rspec
+  variables:
+    FACTER_GEM_VERSION: "< 2.5"
   script:
     - bundle exec rake test
 
