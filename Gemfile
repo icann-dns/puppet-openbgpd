@@ -52,6 +52,7 @@ group :development do
 end
 
 group :system_tests do
+  gem 'vagrant-wrapper',               :require => false
   gem 'beaker', '<= 2.51.0',           :require => false if RUBY_VERSION < '2.2.5'
   gem 'progressbar',                   :require => false
   if beaker_version = ENV['BEAKER_VERSION']
