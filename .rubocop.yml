@@ -122,7 +122,8 @@ Lint/Void:
 Layout/AccessModifierIndentation:
   Enabled: True
 
-Naming/AccessorMethodName:
+#Naming/AccessorMethodName:
+Style/AccessorMethodName:
   Enabled: True
 
 Style/Alias:
@@ -158,7 +159,8 @@ Layout/CaseIndentation:
 Style/CharacterLiteral:
   Enabled: True
 
-Naming/ClassAndModuleCamelCase:
+#Naming/ClassAndModuleCamelCase:
+Style/ClassAndModuleCamelCase:
   Enabled: True
 
 Style/ClassAndModuleChildren:
@@ -256,7 +258,8 @@ Style/CommentAnnotation:
 Metrics/CyclomaticComplexity:
   Enabled: False
 
-Naming/ConstantName:
+#Naming/ConstantName:
+Style/ConstantName:
   Enabled: True
 
 Style/Documentation:
@@ -365,7 +368,8 @@ Style/UnlessElse:
 Style/VariableInterpolation:
   Enabled: True
 
-Naming/VariableName:
+#Naming/VariableName:
+Style/VariableName:
   Enabled: True
 
 Style/WhileUntilDo:
@@ -374,7 +378,8 @@ Style/WhileUntilDo:
 Style/EvenOdd:
   Enabled: True
 
-Naming/FileName:
+#Naming/FileName:
+Style/FileName:
   Enabled: True
 
 Style/For:
@@ -383,7 +388,8 @@ Style/For:
 Style/Lambda:
   Enabled: True
 
-Naming/MethodName:
+#Naming/MethodName:
+Style/MethodName:
   Enabled: True
 
 Style/MultilineTernaryOperator:
@@ -419,8 +425,10 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: True
 
-Style/BinaryOperatorParameterName:
+Style/OpMethods:
   Enabled: True
+#Style/BinaryOperatorParameterName:
+#  Enabled: True
 
 Style/ParenthesesAroundCondition:
   Enabled: True
@@ -431,7 +439,8 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: True
 
-Naming/PredicateName:
+#Naming/PredicateName:
+Style/PredicateName:
   Enabled: True
 
 Style/RedundantException:
