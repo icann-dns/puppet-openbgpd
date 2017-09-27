@@ -18,7 +18,7 @@ describe 'openbgpd failover server' do
   on(router1, "ifconfig em1 inet6 #{router1_ip6} prefixlen 64", acceptable_exit_codes: [0, 2])
   on(router2, "ifconfig em1 inet6 #{router2_ip6} prefixlen 64", acceptable_exit_codes: [0, 2])
   context 'basic' do
-    pp1 = <<-EOF
+    pp1 = <<-PUPPET_POLICY
     class { '::openbgpd':
       my_asn => #{router1_asn},
       router_id => '#{router1_ip}',
@@ -31,8 +31,8 @@ describe 'openbgpd failover server' do
           }
       }
     }
-    EOF
-    pp2 = <<-EOF
+    PUPPET_POLICY
+    pp2 = <<-PUPPET_POLICY
     class { '::openbgpd':
       my_asn => #{router2_asn},
       router_id => '#{router2_ip}',
@@ -49,7 +49,7 @@ describe 'openbgpd failover server' do
           }
       }
     }
-    EOF
+    PUPPET_POLICY
     it 'work with no errors' do
       apply_manifest(pp1, catch_failures: true)
       apply_manifest_on(router2, pp2, catch_failures: true)

@@ -79,39 +79,39 @@ describe 'openbgpd' do
           ).with_content(
             /router-id 192.0.2.2/
           ).with_content(
-            %r{network 192.0.2.0\/25}
+            %r{network 192.0.2.0/25}
           ).with_content(
-            %r{network 2001:DB8::\/48}
+            %r{network 2001:DB8::/48}
           ).with_content(
-            %r{network 198.51.100.0\/24}
+            %r{network 198.51.100.0/24}
           ).with_content(
-            %r{network 2001:DB8::1\/48}
+            %r{network 2001:DB8::1/48}
           ).with_content(
-            %r{network 192.0.2.0\/24}
+            %r{network 192.0.2.0/24}
           ).with_content(
-            %r{network 2001:DB8::\/32}
+            %r{network 2001:DB8::/32}
           ).with_content(
             /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
           ).with_content(
-            %r{deny from group "AS64497" inet prefix 0.0.0.0\/0 prefixlen = 0}
+            %r{deny from group "AS64497" inet prefix 0.0.0.0/0 prefixlen = 0}
           ).with_content(
             /deny from group "AS64497" inet prefixlen > 24/
           ).with_content(
-            %r{deny from group "AS64497" inet6 prefix ::\/0 prefixlen = 0}
+            %r{deny from group "AS64497" inet6 prefix ::/0 prefixlen = 0}
           ).with_content(
             /deny from group "AS64497" inet6 prefixlen > 48/
           ).with_content(
-            %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+            %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
           ).with_content(
-            %r{match to group "AS64497" prefix 198.51.100.0\/24 set \{\s+community 64497:100\s+\}}
+            %r{match to group "AS64497" prefix 198.51.100.0/24 set \{\s+community 64497:100\s+\}}
           ).with_content(
-            %r{match to group "AS64497" prefix 2001:DB8::1\/48 set \{\s+community 64497:100\s+\}}
+            %r{match to group "AS64497" prefix 2001:DB8::1/48 set \{\s+community 64497:100\s+\}}
           ).with_content(
-            %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+            %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
           ).with_content(
-            %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+            %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
           ).with_content(
-            %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+            %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
           ).with_content(
             /group "AS64498" \{\s+remote-as 64498\s+neighbor "192.0.2.2" \{\s+descr "TEST 2 Network"\s+\}\s+\}/
           ).with_content(
@@ -127,21 +127,21 @@ describe 'openbgpd' do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             ).with_content(
-              %r{deny from group "AS64497" inet prefix 0.0.0.0\/0 prefixlen = 0}
+              %r{deny from group "AS64497" inet prefix 0.0.0.0/0 prefixlen = 0}
             ).with_content(
               /deny from group "AS64497" inet prefixlen > 24/
             ).with_content(
-              %r{deny from group "AS64497" inet6 prefix ::\/0 prefixlen = 0}
+              %r{deny from group "AS64497" inet6 prefix ::/0 prefixlen = 0}
             ).with_content(
               /deny from group "AS64497" inet6 prefixlen > 48/
             ).without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -150,13 +150,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -166,8 +166,8 @@ describe 'openbgpd' do
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               %r{
-              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s0.0.0.0\/0\sprefixlen\s=\s0\n
-              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s192.0.2.0\/24\sprefixlen\s>=\s24\n
+              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s0.0.0.0/0\sprefixlen\s=\s0\n
+              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s192.0.2.0/24\sprefixlen\s>=\s24\n
               deny\sfrom\sgroup\s"AS64497"\sinet\sprefixlen\s>\s24\n
               }x
             )
@@ -179,8 +179,8 @@ describe 'openbgpd' do
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               %r{
-              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s::\/0\sprefixlen\s=\s0\n
-              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s2001:DB8::1\/48\sprefixlen\s>=\s48\n
+              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s::/0\sprefixlen\s=\s0\n
+              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s2001:DB8::1/48\sprefixlen\s>=\s48\n
               deny\sfrom\sgroup\s"AS64497"\sinet6\sprefixlen\s>\s48\n
               }x
             )
@@ -191,13 +191,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -206,13 +206,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -221,13 +221,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -236,13 +236,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -251,13 +251,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -266,13 +266,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:100\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             ).without_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:100\s+\}}
             )
           end
         end
@@ -439,13 +439,13 @@ describe 'openbgpd' do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               /group "AS64497" \{\s+remote-as 64497\s+multihop 5\s+set prepend-self 3\s+neighbor "2001:DB8::2" \{\s+descr "TEST Network"\s+\}\s+neighbor "192.0.2.2" \{\s+descr "TEST Network"\s+\}\s+\}/
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/25 set \{\s+community 64497:200\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+community 64497:200\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/48 set \{\s+community 64497:200\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/48 set \{\s+community 64497:200\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 192.0.2.0\/24 set \{\s+community NO_EXPORT,\s+community 64497:200\s+\}}
+              %r{match to group "AS64497" prefix 192.0.2.0/24 set \{\s+community NO_EXPORT,\s+community 64497:200\s+\}}
             ).with_content(
-              %r{match to group "AS64497" prefix 2001:DB8::\/32 set \{\s+community NO_EXPORT,\s+community 64497:200\s+\}}
+              %r{match to group "AS64497" prefix 2001:DB8::/32 set \{\s+community NO_EXPORT,\s+community 64497:200\s+\}}
             )
           end
         end

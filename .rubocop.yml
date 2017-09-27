@@ -425,7 +425,7 @@ Style/NumericLiterals:
 Style/OneLineConditional:
   Enabled: True
 
-Style/OpMethods:
+Style/OpMethod:
   Enabled: True
 #Style/BinaryOperatorParameterName:
 #  Enabled: True
@@ -463,7 +463,6 @@ Style/RescueModifier:
 
 # based on https://github.com/voxpupuli/modulesync_config/issues/168
 Style/RegexpLiteral:
-  EnforcedStyle: percent_r
   Enabled: True
 
 Lint/UnderscorePrefixedVariableName:

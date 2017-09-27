@@ -4,7 +4,7 @@ require 'spec_helper_acceptance'
 
 describe 'openbgpd class' do
   context 'basic IPv4 peer' do
-    pp = <<-EOF
+    pp = <<-PUPPET_POLICY
     class { '::openbgpd':
       my_asn => 64496,
       router_id => '192.0.2.1',
@@ -16,7 +16,7 @@ describe 'openbgpd class' do
           }
       }
     }
-      EOF
+      PUPPET_POLICY
     it 'work with no errors' do
       apply_manifest(pp, catch_failures: true)
     end
