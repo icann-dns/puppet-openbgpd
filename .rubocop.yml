@@ -12,6 +12,7 @@ AllCops:
     - Gemfile
     - Rakefile
     - Guardfile
+    - Vagrantfile
 Lint/ConditionPosition:
   Enabled: True
 
@@ -463,6 +464,7 @@ Style/RescueModifier:
 
 # based on https://github.com/voxpupuli/modulesync_config/issues/168
 Style/RegexpLiteral:
+  EnforcedStyle: percent_r
   Enabled: True
 
 Lint/UnderscorePrefixedVariableName:
