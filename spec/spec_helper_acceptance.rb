@@ -25,7 +25,7 @@ end
 hosts.each do |host|
   step "install packages on #{host}"
   host.install_package('git')
-  if host['platform'] =~ /freebsd/
+  if host['platform'] =~ %r{freebsd}
     # default installs incorect version
     host.install_package('devel/rubygem-gems')
     host.install_package('dns/bind-tools')

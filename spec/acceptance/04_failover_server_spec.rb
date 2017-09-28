@@ -81,28 +81,28 @@ describe 'openbgpd failover server' do
 
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show neighbor #{router2_ip6}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show rib peer-as #{router2_asn}") do
-      its(:stdout) { is_expected.not_to match(/\b#{ipv4_network}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{ipv4_network}\b}) }
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
-      its(:stdout) { is_expected.not_to match(/\b#{ipv6_network}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{ipv6_network}\b}) }
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
     end

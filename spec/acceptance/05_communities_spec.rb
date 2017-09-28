@@ -82,60 +82,60 @@ describe 'openbgpd class failsafe networks router' do
 
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show neighbor #{router2_ip6}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show rib peer-as #{router2_asn}") do
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv6_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv6_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
     end
     describe command('bgpctl show rib community NO_EXPORT') do
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
     end
     describe command('bgpctl show rib community 999:100') do
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i/
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
         )
       end
     end

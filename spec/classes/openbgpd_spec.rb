@@ -61,9 +61,9 @@ describe 'openbgpd' do
             require: 'Package[openbgpd]',
             notify: 'Service[openbgpd]'
           ).with_content(
-            /AS 64496/
+            %r{AS 64496}
           ).with_content(
-            /router-id 192.0.2.2/
+            %r{router-id 192.0.2.2}
           ).with_content(
             %r{network 192.0.2.0\/25}
           ).with_content(
@@ -87,7 +87,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              /AS 64497/
+              %r{AS 64497}
             )
           end
         end
@@ -96,7 +96,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              /router-id 192.0.2.3/
+              %r{router-id 192.0.2.3}
             )
           end
         end
@@ -105,7 +105,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 192.0.2.0\/25}
+              %r{network 192.0.2.0/25}
             )
           end
         end
@@ -114,7 +114,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 2001:DB8::\/48}
+              %r{network 2001:DB8::/48}
             )
           end
         end
@@ -123,7 +123,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 192.0.2.0\/24}
+              %r{network 192.0.2.0/24}
             )
           end
         end
@@ -132,7 +132,7 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 2001:DB8::\/32}
+              %r{network 2001:DB8::/32}
             )
           end
         end
@@ -141,13 +141,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 192.0.2.0\/25}
+              %r{network 192.0.2.0/25}
             ).without_content(
-              %r{network 2001:DB8::\/48}
+              %r{network 2001:DB8::/48}
             ).with_content(
-              %r{network 192.0.2.0\/24}
+              %r{network 192.0.2.0/24}
             ).with_content(
-              %r{network 2001:DB8::\/32}
+              %r{network 2001:DB8::/32}
             )
           end
         end
@@ -156,13 +156,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 192.0.2.0\/25}
+              %r{network 192.0.2.0/25}
             ).without_content(
-              %r{network 2001:DB8::\/48}
+              %r{network 2001:DB8::/48}
             ).without_content(
-              %r{network 192.0.2.0\/24}
+              %r{network 192.0.2.0/24}
             ).without_content(
-              %r{network 2001:DB8::\/32}
+              %r{network 2001:DB8::/32}
             )
           end
         end
@@ -171,13 +171,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').without_content(
-              %r{network 192.0.2.0\/25}
+              %r{network 192.0.2.0/25}
             ).with_content(
-              %r{network 2001:DB8::\/48}
+              %r{network 2001:DB8::/48}
             ).without_content(
-              %r{network 192.0.2.0\/24}
+              %r{network 192.0.2.0/24}
             ).with_content(
-              %r{network 2001:DB8::\/32}
+              %r{network 2001:DB8::/32}
             )
           end
         end
@@ -186,13 +186,13 @@ describe 'openbgpd' do
           it { is_expected.to compile }
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
-              %r{network 192.0.2.0\/25}
+              %r{network 192.0.2.0/25}
             ).without_content(
-              %r{network 2001:DB8::\/48}
+              %r{network 2001:DB8::/48}
             ).with_content(
-              %r{network 192.0.2.0\/24}
+              %r{network 192.0.2.0/24}
             ).without_content(
-              %r{network 2001:DB8::\/32}
+              %r{network 2001:DB8::/32}
             )
           end
         end

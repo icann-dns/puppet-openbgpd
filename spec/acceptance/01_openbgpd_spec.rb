@@ -37,12 +37,12 @@ describe 'openbgpd class' do
     describe command('bgpctl show neighbor') do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is 192.0.2.2, remote AS 64497/
+          %r{BGP neighbor is 192.0.2.2, remote AS 64497}
         )
       end
       its(:stdout) do
         is_expected.not_to match(
-          /BGP neighbor is 2001:db8::2, remote AS 64497/
+          %r{BGP neighbor is 2001:db8::2, remote AS 64497}
         )
       end
     end
@@ -77,12 +77,12 @@ describe 'openbgpd class' do
     describe command('bgpctl show neighbor') do
       its(:stdout) do
         is_expected.not_to match(
-          /BGP neighbor is 192.0.2.2, remote AS 64497/
+          %r{BGP neighbor is 192.0.2.2, remote AS 64497}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is 2001:db8::2, remote AS 64497/
+          %r{BGP neighbor is 2001:db8::2, remote AS 64497}
         )
       end
     end
@@ -119,12 +119,12 @@ describe 'openbgpd class' do
     describe command('bgpctl show neighbor') do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is 192.0.2.2, remote AS 64497/
+          %r{BGP neighbor is 192.0.2.2, remote AS 64497}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is 2001:db8::2, remote AS 64497/
+          %r{BGP neighbor is 2001:db8::2, remote AS 64497}
         )
       end
     end

@@ -117,64 +117,64 @@ describe 'openbgpd class multi peers' do
 
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show neighbor #{router2_ip6}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show neighbor #{router3_ip}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router3_ip}, remote AS #{router3_asn}.*?Established/m
+          %r{BGP neighbor is #{router3_ip}, remote AS #{router3_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show neighbor #{router3_ip6}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router3_ip6}, remote AS #{router3_asn}.*?Established/m
+          %r{BGP neighbor is #{router3_ip6}, remote AS #{router3_asn}.*?Established}m
         )
       end
     end
     describe command('bgpctl show rib empty-as') do
       its(:stdout) do
         is_expected.not_to match(
-          /AI\*>?\s#{ipv4_network}\s+0\.0\.0\.0\s+\d+\s+\d+\s+i/
+          %r{AI\*>?\s#{ipv4_network}\s+0\.0\.0\.0\s+\d+\s+\d+\s+i}
         )
       end
       its(:stdout) do
         is_expected.not_to match(
-          /AI\*>?\s#{ipv6_network}\s+::\s+\d+\s+\d+\s+i/
+          %r{AI\*>?\s#{ipv6_network}\s+::\s+\d+\s+\d+\s+i}
         )
       end
     end
     describe command("bgpctl show rib peer-as #{router2_asn}") do
       its(:stdout) do
         is_expected.not_to match(
-          /\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv6_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{ipv6_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
     end
     describe command(" bgpctl show rib peer-as #{router3_asn}") do
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{ipv4_network}\s+#{router3_ip}\s+\d+\s+\d+\s+#{router3_asn}\s+i/
+          %r{\*>\s+#{ipv4_network}\s+#{router3_ip}\s+\d+\s+\d+\s+#{router3_asn}\s+i}
         )
       end
       its(:stdout) do
         is_expected.not_to match(
-          /\*>\s+#{ipv6_network}\s+#{router3_ip6}\s+\d+\s+\d+\s+#{router3_asn}\s+i/
+          %r{\*>\s+#{ipv6_network}\s+#{router3_ip6}\s+\d+\s+\d+\s+#{router3_asn}\s+i}
         )
       end
     end

@@ -88,23 +88,23 @@ describe 'openbgpd class ACLs ' do
     describe command("bgpctl show neighbor #{router2_ip}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command("bgpctl show neighbor #{router2_ip6}") do
       its(:stdout) do
         is_expected.to match(
-          /BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established/m
+          %r{BGP neighbor is #{router2_ip6}, remote AS #{router2_asn}.*?Established}m
         )
       end
     end
     describe command('bgpctl show rib') do
-      its(:stdout) { is_expected.not_to match(/\b192\.0\.2\.0\b/) }
-      its(:stdout) { is_expected.not_to match(/\b198\.51\.100\.0\b/) }
-      its(:stdout) { is_expected.not_to match(/\b0\.0\.0\.0\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network2}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b192\.0\.2\.0\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b198\.51\.100\.0\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b0\.0\.0\.0\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network2}\b}) }
       its(:stdout) { is_expected.not_to match(%r{\b::\/0\b}) }
     end
   end
@@ -135,23 +135,23 @@ describe 'openbgpd class ACLs ' do
 
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{additional_v4_network1}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{additional_v4_network1}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{additional_v4_network2}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{additional_v4_network2}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
-      its(:stdout) { is_expected.not_to match(/\b0\.0\.0\.0\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b0\.0\.0\.0\b}) }
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{additional_v6_network1}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{additional_v6_network1}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{additional_v6_network2}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{additional_v6_network2}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) { is_expected.not_to match(%r{\b::\/0\b}) }
@@ -184,17 +184,17 @@ describe 'openbgpd class ACLs ' do
     describe command("bgpctl show rib peer-as #{router2_asn}") do
       let(:pre_command) { 'sleep 120' }
 
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network1}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network1}\b}) }
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{additional_v4_network2}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{additional_v4_network2}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
-      its(:stdout) { is_expected.not_to match(/\b0\.0\.0\.0\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network1}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b0\.0\.0\.0\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network1}\b}) }
       its(:stdout) do
         is_expected.to match(
-          /\*>\s+#{additional_v6_network2}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i/
+          %r{\*>\s+#{additional_v6_network2}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) { is_expected.not_to match(%r{\b::\/0\b}) }
@@ -254,15 +254,15 @@ describe 'openbgpd class ACLs ' do
     describe command("bgpctl show rib peer-as #{router2_asn}") do
       let(:pre_command) { 'sleep 120' }
 
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network2}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network2}\b}) }
       its(:stdout) do
         is_expected.to match(
           %r{\*>\s+0\.0\.0\.0/0\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network2}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network2}\b}) }
       its(:stdout) do
         is_expected.to match(
           %r{\*>\s+::/0\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
@@ -295,15 +295,15 @@ describe 'openbgpd class ACLs ' do
     describe command("bgpctl show rib peer-as #{router2_asn}") do
       let(:pre_command) { 'sleep 120' }
 
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network2}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network2}\b}) }
       its(:stdout) do
         is_expected.to match(
           %r{\*>\s+0\.0\.0\.0/0\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network2}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network2}\b}) }
       its(:stdout) { is_expected.not_to match(%r{\b::/0\b}) }
     end
   end
@@ -332,11 +332,11 @@ describe 'openbgpd class ACLs ' do
     describe command("bgpctl show rib peer-as #{router2_asn}") do
       let(:pre_command) { 'sleep 120' }
 
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v4_network2}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b0\.0\.0\.0\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network1}\b/) }
-      its(:stdout) { is_expected.not_to match(/\b#{additional_v6_network2}\b/) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v4_network2}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b0\.0\.0\.0\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network1}\b}) }
+      its(:stdout) { is_expected.not_to match(%r{\b#{additional_v6_network2}\b}) }
       its(:stdout) do
         is_expected.to match(
           %r{\*>\s+::/0\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
