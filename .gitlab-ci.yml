@@ -1,29 +1,33 @@
 stages:
-  - rspec
+  - lint
   - rubocop
+  - rspec
   - beaker_apply
   - beaker_agent
 
 before_script:
-  - rvm -v
   - ruby -v
   - bundle --version
   - gem --version
-  - rvm use 2.3
   - rm Gemfile.lock || true
   - FACTER_GEM_VERSION="< 2.5" bundle install --path=${BUNDLE_PATH:-vendor/bundle}
 
-rspec:
-  stage: rspec
-  variables:
-    FACTER_GEM_VERSION: "< 2.5"
+lint:
+  stage: lint
   script:
-    - bundle exec rake test
+    - bundle exec rake validate lint
 
 rubocop:
   stage: rubocop
   script:
     - bundle exec rake rubocop
+    
+rspec:
+  stage: rspec
+  variables:
+    FACTER_GEM_VERSION: '< 2.5'
+  script:
+    - bundle exec rake spec
 
 beaker:
   stage: beaker_apply
@@ -31,4 +35,4 @@ beaker:
     BEAKER_set: freebsd-multi-10.3
     BEAKER_TESTMODE: apply
   script:
-    -  bundle exec rake beaker
+    - bundle exec rake beaker

@@ -1,0 +1,16 @@
+#!/bin/sh
+# this doesnt seem to always work more testing needed
+
+/usr/local/sbin/bgpctl reload
+<%- @peers.each_pair do |as, config| -%>
+  <%- if config.has_key?('addr4') then -%>
+    <%- config['addr4'].each do |addr| -%>
+/usr/local/sbin/bgpctl neighbor <%= addr %> clear
+    <%- end -%>
+  <%- end -%>
+  <%- if config.has_key?('addr6') then -%>
+    <%- config['addr6'].each do |addr| -%>
+/usr/local/sbin/bgpctl neighbor <%= addr %> clear
+    <%- end -%>
+  <%- end -%>
+<%- end -%>

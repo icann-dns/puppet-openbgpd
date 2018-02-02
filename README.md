@@ -149,6 +149,7 @@ class { '::openbgpd::bgpd':
 * `enable_advertisements_v6` (Bool, Default: true): If this is set to false then no IPv6 networks, including the failsafe IPv6 networks, will be advertised.
 * `conf_file` (Absolute file path, Default: '/etc/openbgpd/bgpd.conf'): The fully qualified path to the managed config file
 
+
 #### Defined `openbgpd::peer`
 
 Creat config for individual peers
