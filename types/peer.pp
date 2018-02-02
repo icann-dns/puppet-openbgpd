@@ -6,6 +6,7 @@ type Openbgpd::Peer = Struct[{
   communities       => Optional[Array[Openbgpd::Community]],
   multihop          => Optional[Integer[1,255]],
   prepend           => Optional[Integer[1,255]],
+  default_originate => Optional[Boolean],
   inbound_routes    => Optional[
     Enum['all', 'none', 'default', 'v6default', 'v4default']]
 }]
