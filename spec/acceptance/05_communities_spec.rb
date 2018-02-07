@@ -122,7 +122,7 @@ describe 'openbgpd class failsafe networks router' do
         )
       end
       its(:stdout) do
-        is_expected.to_not match(
+        is_expected.not_to match(
           %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
@@ -132,7 +132,7 @@ describe 'openbgpd class failsafe networks router' do
         )
       end
       its(:stdout) do
-        is_expected.to_not match(
+        is_expected.not_to match(
           %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
@@ -144,7 +144,7 @@ describe 'openbgpd class failsafe networks router' do
         )
       end
       its(:stdout) do
-        is_expected.to_not match(
+        is_expected.not_to match(
           %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
@@ -154,7 +154,7 @@ describe 'openbgpd class failsafe networks router' do
         )
       end
       its(:stdout) do
-        is_expected.to_not match(
+        is_expected.not_to match(
           %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
