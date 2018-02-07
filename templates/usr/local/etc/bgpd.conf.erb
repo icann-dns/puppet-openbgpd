@@ -91,7 +91,7 @@ deny from group "AS<%= as %>"
   <%- if config.has_key?('communities') then 
       #This should ensure no-export is always first if present
       config['communities'] = config['communities'].sort{ |x,y| y<=>x} 
-    @nets.each do |net| -%>
+    (@networks4 + @networks6).each do |net| -%>
 match to group "AS<%= as %>" prefix <%= net %> set {
       <%- config['communities'].each do |community|
         if community.strip == 'no-export' then

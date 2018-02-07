@@ -101,7 +101,7 @@ describe 'openbgpd class failsafe networks router' do
       end
       its(:stdout) do
         is_expected.to match(
-          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) do
@@ -111,19 +111,29 @@ describe 'openbgpd class failsafe networks router' do
       end
       its(:stdout) do
         is_expected.to match(
-          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
     end
     describe command('bgpctl show rib community NO_EXPORT') do
       its(:stdout) do
         is_expected.to match(
-          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+          %r{\*>\s+#{ipv4_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+        )
+      end
+      its(:stdout) do
+        is_expected.to_not match(
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
       its(:stdout) do
         is_expected.to match(
-          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+          %r{\*>\s+#{ipv6_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+        )
+      end
+      its(:stdout) do
+        is_expected.to_not match(
+          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
     end
@@ -134,8 +144,18 @@ describe 'openbgpd class failsafe networks router' do
         )
       end
       its(:stdout) do
+        is_expected.to_not match(
+          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
+        )
+      end
+      its(:stdout) do
         is_expected.to match(
-          %r{\*>\s+#{ipv4_failsafe_network}\s+#{router2_ip}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+          %r{\*>\s+#{ipv6_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+(#{router2_asn}\s+){4}i}
+        )
+      end
+      its(:stdout) do
+        is_expected.to_not match(
+          %r{\*>\s+#{ipv6_failsafe_network}\s+#{router2_ip6}\s+\d+\s+\d+\s+#{router2_asn}\s+i}
         )
       end
     end
