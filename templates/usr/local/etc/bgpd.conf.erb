@@ -19,9 +19,7 @@ if @enable_advertisements then
   if @enable_advertisements_v6 then
     @nets += @failsafe_networks6
   end
-end
-@fail_nets = @failsafe_networks4 + @failsafe_networks6
- -%>
+end -%>
 AS <%= @my_asn %>
 router-id <%= @router_id %>
 <%- unless @fib_update -%>
@@ -35,9 +33,6 @@ group "AS<%= as %>" {
   remote-as <%= as %>
   <%- if config.has_key?('multihop') then -%>
   multihop <%= config['multihop'] %>
-  <%- end -%>
-  <%- if config.has_key?('prepend') then -%>
-  set prepend-self <%= config['prepend'] %>
   <%- end -%>
   <%- if config.has_key?('addr6') then -%>
     <%- config['addr6'].each do |addr| -%>
@@ -93,14 +88,9 @@ deny from group "AS<%= as %>"
       config['communities'] = config['communities'].sort{ |x,y| y<=>x} 
     (@networks4 + @networks6).each do |net| -%>
 match to group "AS<%= as %>" prefix <%= net %> set {
+      <%- if config.has_key?('prepend') then -%> prepend-self <%= config['prepend'] %><%- end -%>
       <%- config['communities'].each do |community|
-        if community.strip == 'no-export' then
-          if @fail_nets.include?(net) -%>
-  community NO_EXPORT<%- if community != config['communities'].last -%>, <%- end -%>
-          <%- end
-        else -%>
-  community <%= community %><%- if community != config['communities'].last -%>, <%- end -%>
-        <%- end 
+        if community.strip == 'no-export' then -%> community NO_EXPORT<%- else -%> community <%= community %><%- end 
       end -%>
 
 }
