@@ -162,7 +162,7 @@ describe 'openbgpd' do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               %r{
               deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s0.0.0.0/0\sprefixlen\s=\s0\n
-              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s192.0.2.0/24\sprefixlen\s>=\s24\n
+              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s192.0.2.0/24\sprefixlen\s<=\s24\n
               deny\sfrom\sgroup\s"AS64497"\sinet\sprefixlen\s>\s24\n
               }x
             )
@@ -175,7 +175,7 @@ describe 'openbgpd' do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               %r{
               deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s::/0\sprefixlen\s=\s0\n
-              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s2001:DB8::1/48\sprefixlen\s>=\s48\n
+              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s2001:DB8::1/48\sprefixlen\s<=\s48\n
               deny\sfrom\sgroup\s"AS64497"\sinet6\sprefixlen\s>\s48\n
               }x
             )

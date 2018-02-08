@@ -1,3 +1,5 @@
+## 2018-02-08 0.2.2
+* Update reject filters to use the correct prefix modifier
 ## 2018-02-02 0.2.1
 * failsafe\_networks should not get communities or prepends
 
