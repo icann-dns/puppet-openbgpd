@@ -66,7 +66,6 @@ describe 'openbgpd' do
 
       describe 'check default config' do
         it { is_expected.to compile.with_all_deps }
-
         it { is_expected.to contain_package('openbgpd') }
         it do
           is_expected.to contain_file('/usr/local/etc/bgpd.conf').with(
@@ -97,9 +96,13 @@ describe 'openbgpd' do
           ).with_content(
             %r{deny from group "AS64497" inet prefixlen > 24}
           ).with_content(
+            %r{deny from group "AS64497" inet prefix 169.254.0.0/16 prefixlen <= 24}
+          ).with_content(
             %r{deny from group "AS64497" inet6 prefix ::/0 prefixlen = 0}
           ).with_content(
             %r{deny from group "AS64497" inet6 prefixlen > 48}
+          ).with_content(
+            %r{deny from group "AS64497" inet6 prefix 3ffe::/16 prefixlen <= 48}
           ).with_content(
             %r{match to group "AS64497" prefix 192.0.2.0/25 set \{\s+prepend-self 3 community NO_EXPORT community 64497:100\s+\}}
           ).with_content(
@@ -116,6 +119,28 @@ describe 'openbgpd' do
         end
       end
       describe 'Change Defaults' do
+        context 'reject_bogons_v6' do
+          before { params.merge!(reject_bogons_v6: false) }
+          it { is_expected.to compile }
+          it do
+            is_expected.to contain_file(
+              '/usr/local/etc/bgpd.conf'
+            ).without_content(
+              %r{deny from group "AS64497" inet6 prefix 3ffe::/16 prefixlen <= 48}
+            )
+          end
+        end
+        context 'reject_bogons_v4' do
+          before { params.merge!(reject_bogons_v4: false) }
+          it { is_expected.to compile }
+          it do
+            is_expected.to contain_file(
+              '/usr/local/etc/bgpd.conf'
+            ).without_content(
+              %r{deny from group "AS64497" inet prefix 169.254.0.0/16 prefixlen <= 24}
+            )
+          end
+        end
         context 'networks4' do
           before { params.merge!(networks4: []) }
           it { is_expected.to compile }
@@ -161,9 +186,7 @@ describe 'openbgpd' do
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               %r{
-              deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s0.0.0.0/0\sprefixlen\s=\s0\n
               deny\sfrom\sgroup\s"AS64497"\sinet\sprefix\s192.0.2.0/24\sprefixlen\s<=\s24\n
-              deny\sfrom\sgroup\s"AS64497"\sinet\sprefixlen\s>\s24\n
               }x
             )
           end
@@ -174,9 +197,7 @@ describe 'openbgpd' do
           it do
             is_expected.to contain_file('/usr/local/etc/bgpd.conf').with_content(
               %r{
-              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s::/0\sprefixlen\s=\s0\n
               deny\sfrom\sgroup\s"AS64497"\sinet6\sprefix\s2001:DB8::1/48\sprefixlen\s<=\s48\n
-              deny\sfrom\sgroup\s"AS64497"\sinet6\sprefixlen\s>\s48\n
               }x
             )
           end

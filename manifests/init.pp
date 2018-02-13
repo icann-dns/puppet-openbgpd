@@ -9,6 +9,8 @@ class openbgpd (
   Array[Tea::Ipv6_cidr] $failsafe_networks6       = [],
   Array[Tea::Ipv4_cidr] $rejected_v4              = [],
   Array[Tea::Ipv6_cidr] $rejected_v6              = [],
+  Boolean               $reject_bogons_v4         = true,
+  Boolean               $reject_bogons_v6         = true,
   Boolean               $failover_server          = false,
   Boolean               $enable_advertisements    = true,
   Boolean               $enable_advertisements_v4 = true,

@@ -1,7 +1,48 @@
 #
 # This file is managed by Puppet. DO NOT EDIT.
 #
- <%- 
+<%- 
+  @bogons_v4 = [
+    '0.0.0.0/8',       # RFC1122
+    '10.0.0.0/8',      # RFC1918
+    '100.64.0.0/10',   # RFC6598
+    '127.0.0.0/8',     # RFC1122
+    '169.254.0.0/16',  # RFC3927
+    '172.16.0.0/12',   # RFC1918
+    '192.0.0.0/24',    # RFC5736
+    '192.0.2.0/24',    # RFC5737
+    '192.88.99.0/24',  # RFC3068
+    '192.168.0.0/16',  # RFC1918
+    '198.18.0.0/15',   # RFC2544
+    '198.51.100.0/24', # RFC5737
+    '203.0.113.0/24',  # RFC5737
+    '224.0.0.0/3'      # RFC5771/RFC6034/RFC2365)
+  ]
+  @bogons_v6 = [
+    '3ffe::/16',         # RFC2546
+    '2001:db8::/32',     # RFC3849
+    '2001::/32',         # Teredo
+    '2002::/16',         # 6to4
+    '0000::/8',          # RFC4291
+    '0200::/7',          # RFC4048
+    '0400::/6',          # RFC4291
+    '0800::/5',          # RFC4291
+    '1000::/4',          # RFC4291
+    '2000::/3',          # RFC4291
+    '4000::/3',          # RFC4291
+    '6000::/3',          # RFC4291
+    '8000::/3',          # RFC4291
+    'a000::/3',          # RFC4291
+    'c000::/3',          # RFC4291
+    'e000::/4',          # RFC4291
+    'f000::/5',          # RFC4291
+    'f800::/6',          # RFC4291
+    'fc00::/7',          # RFC4193
+    'fe00::/9',          # RFC4291
+    'fe80::/10',         # RFC4291
+    'fec0::/10',         # RFC3879
+    'ff00::/8'           # RFC4291
+  ]
 @no_export = false 
 @nets = []
 if @enable_advertisements then
@@ -61,11 +102,21 @@ group "AS<%= as %>" {
 }
   <%- if config['inbound_routes'].to_s == 'all' then -%>
 deny from group "AS<%= as %>" inet prefix 0.0.0.0/0 prefixlen = 0
+  <%- if @reject_bogons_v4 -%>
+    <%- @bogons_v4.each do |reject| -%>
+deny from group "AS<%= as %>" inet prefix <%= reject %> prefixlen <= 24
+    <%- end -%>
+  <%- end -%>
   <%- @rejected_v4.each do |reject| -%>
 deny from group "AS<%= as %>" inet prefix <%= reject %> prefixlen <= 24
   <%- end -%>
 deny from group "AS<%= as %>" inet prefixlen > 24
 deny from group "AS<%= as %>" inet6 prefix ::/0 prefixlen = 0
+  <%- if @reject_bogons_v6 -%>
+    <%-  @bogons_v6.each do |reject| -%>
+deny from group "AS<%= as %>" inet6 prefix <%= reject %> prefixlen <= 48
+    <%- end -%>
+  <%- end -%>
   <%-  @rejected_v6.each do |reject| -%>
 deny from group "AS<%= as %>" inet6 prefix <%= reject %> prefixlen <= 48
   <%- end -%>
